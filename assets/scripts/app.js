@@ -1,23 +1,44 @@
+// Elements
 const listEl = document.querySelector('.posts');
 const postTemplate = document.querySelector('template');
 
-const xhr = new XMLHttpRequest();
+// Sends Http Request - Returns Promise
+function sendHttpRequest(method, url) {
+  const promise = new Promise((resolve, rejectt) => {
+    const xhr = new XMLHttpRequest();
 
-xhr.open('GET', 'https://jsonplaceholder.typicode.com/posts');
+    xhr.open(method, url);
 
-xhr.responseType = 'json'; // alternatie to JSON.parse(xhr.response)
+    xhr.responseType = 'json'; // alternatie to JSON.parse(xhr.response)
 
-xhr.onload = function () {
-  // const posts = JSON.parse(xhr.response);
-  const posts = xhr.response;
-  console.log(posts);
+    xhr.onload = function () {
+      // const posts = JSON.parse(xhr.response);
 
-  for (const post of posts) {
-    const listItemEl = postTemplate.content.querySelector('li').cloneNode(true);
-    listItemEl.querySelector('h2').textContent = post.title.toUpperCase();
-    listItemEl.querySelector('p').textContent = post.body;
-    listEl.append(listItemEl);
-  }
-};
+      resolve(xhr.response); // we have access to xhr.response property when data has been loaded
+    };
 
-xhr.send();
+    xhr.send();
+  });
+
+  return promise;
+}
+
+// Using Promise - Get Data & append it inside DOM
+function fetchPosts() {
+  sendHttpRequest('GET', 'https://jsonplaceholder.typicode.com/posts').then(
+    (responseData) => {
+      const posts = responseData;
+
+      for (const post of posts) {
+        const listItemEl = postTemplate.content
+          .querySelector('li')
+          .cloneNode(true);
+        listItemEl.querySelector('h2').textContent = post.title.toUpperCase();
+        listItemEl.querySelector('p').textContent = post.body;
+        listEl.append(listItemEl);
+      }
+    }
+  );
+}
+
+fetchPosts();
