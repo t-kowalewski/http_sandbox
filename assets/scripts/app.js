@@ -3,7 +3,7 @@ const listEl = document.querySelector('.posts');
 const postTemplate = document.querySelector('template');
 
 // Sends Http Request - Returns Promise
-function sendHttpRequest(method, url) {
+function sendHttpRequest(method, url, data) {
   const promise = new Promise((resolve, rejectt) => {
     const xhr = new XMLHttpRequest();
 
@@ -17,7 +17,7 @@ function sendHttpRequest(method, url) {
       resolve(xhr.response); // we have access to xhr.response property when data has been loaded
     };
 
-    xhr.send();
+    xhr.send(JSON.stringify(data)); // accepts optional body param
   });
 
   return promise;
@@ -41,4 +41,17 @@ function fetchPosts() {
   );
 }
 
+// Using Promise - Post Data
+function createPost(title, content) {
+  const postId = Math.random();
+  const post = {
+    title: title,
+    body: content,
+    userId: postId,
+  };
+
+  sendHttpRequest('POST', 'https://jsonplaceholder.typicode.com/posts', post);
+}
+
 fetchPosts();
+createPost('TEST TITLE', 'SOME RANDOM TEXT BODY');
