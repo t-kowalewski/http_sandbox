@@ -1,6 +1,8 @@
 // Elements
 const listEl = document.querySelector('.posts');
 const postTemplate = document.querySelector('template');
+const newPostForm = document.querySelector('#new-post form');
+const fetchPostsBtn = document.querySelector('#available-posts button');
 
 // Sends Http Request - Returns Promise
 function sendHttpRequest(method, url, data) {
@@ -28,6 +30,7 @@ function fetchPosts() {
   sendHttpRequest('GET', 'https://jsonplaceholder.typicode.com/posts').then(
     (responseData) => {
       const posts = responseData;
+      listEl.textContent = '';
 
       for (const post of posts) {
         const listItemEl = postTemplate.content
@@ -53,5 +56,12 @@ function createPost(title, content) {
   sendHttpRequest('POST', 'https://jsonplaceholder.typicode.com/posts', post);
 }
 
-fetchPosts();
-createPost('TEST TITLE', 'SOME RANDOM TEXT BODY');
+fetchPostsBtn.addEventListener('click', fetchPosts);
+
+newPostForm.addEventListener('submit', (event) => {
+  event.preventDefault();
+  const enteredTitle = event.currentTarget.querySelector('#title').value;
+  const enteredContent = event.currentTarget.querySelector('#content').value;
+
+  createPost(enteredTitle, enteredContent);
+});
