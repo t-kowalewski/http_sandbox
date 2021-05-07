@@ -38,6 +38,7 @@ function fetchPosts() {
           .cloneNode(true);
         listItemEl.querySelector('h2').textContent = post.title.toUpperCase();
         listItemEl.querySelector('p').textContent = post.body;
+        listItemEl.id = `post-${post.id}`;
         listEl.append(listItemEl);
       }
     }
@@ -64,4 +65,15 @@ newPostForm.addEventListener('submit', (event) => {
   const enteredContent = event.currentTarget.querySelector('#content').value;
 
   createPost(enteredTitle, enteredContent);
+});
+
+listEl.addEventListener('click', (event) => {
+  if (event.target.tagName === 'BUTTON') {
+    const postId = event.target.closest('li').id;
+
+    sendHttpRequest(
+      'DELETE',
+      `https://jsonplaceholder.typicode.com/posts/${postId.slice(5)}`
+    );
+  }
 });
