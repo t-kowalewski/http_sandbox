@@ -70,6 +70,7 @@ newPostForm.addEventListener('submit', (event) => {
 listEl.addEventListener('click', (event) => {
   if (event.target.tagName === 'BUTTON') {
     const postId = event.target.closest('li').id;
+    event.target.closest('li').remove();
 
     sendHttpRequest(
       'DELETE',
