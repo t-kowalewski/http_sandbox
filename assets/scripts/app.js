@@ -6,7 +6,7 @@ const fetchPostsBtn = document.querySelector('#available-posts button');
 
 // Sends Http Request - Returns Promise
 function sendHttpRequest(method, url, data) {
-  const promise = new Promise((resolve, rejectt) => {
+  const promise = new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
 
     xhr.open(method, url);
@@ -70,11 +70,13 @@ newPostForm.addEventListener('submit', (event) => {
 listEl.addEventListener('click', (event) => {
   if (event.target.tagName === 'BUTTON') {
     const postId = event.target.closest('li').id;
-    event.target.closest('li').remove();
+    // event.target.closest('li').remove();
 
     sendHttpRequest(
       'DELETE',
       `https://jsonplaceholder.typicode.com/posts/${postId.slice(5)}`
-    );
+    ).then(() => {
+      event.target.closest('li').remove();
+    });
   }
 });
