@@ -8,12 +8,16 @@ const fetchPostsBtn = document.querySelector('#available-posts button');
 
 // Sends Http Request - Returns Promise
 function sendHttpRequest(method, url, data) {
-  return fetch(url, { method: method, body: JSON.stringify(data) }).then(
-    (response) => {
-      // fetch returns promise resolved with 'Response' object with streamed data which should be converted first via .json()
-      return response.json(); // .json returns promise as well
-    }
-  ); // returns promise, in simplest form with only one param (url) - makes GET request
+  return fetch(url, {
+    method: method,
+    body: JSON.stringify(data),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  }).then((response) => {
+    // fetch returns promise resolved with 'Response' object with streamed data which should be converted first via .json()
+    return response.json(); // .json returns promise as well
+  }); // returns promise, in simplest form with only one param (url) - makes GET request
 }
 
 // Using Promise - Get Data & append it inside DOM

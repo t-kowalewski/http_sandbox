@@ -11,6 +11,8 @@ function sendHttpRequest(method, url, data) {
 
     xhr.open(method, url);
 
+    xhr.setRequestHeader('Content-Type', 'application/json'); // each header - separate method call
+
     xhr.responseType = 'json'; // alternatie to JSON.parse(xhr.response)
 
     xhr.onload = function () {
