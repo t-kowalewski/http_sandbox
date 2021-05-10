@@ -14,10 +14,22 @@ function sendHttpRequest(method, url, data) {
     headers: {
       'Content-Type': 'application/json',
     },
-  }).then((response) => {
-    // fetch returns promise resolved with 'Response' object with streamed data which should be converted first via .json()
-    return response.json(); // .json returns promise as well
-  }); // returns promise, in simplest form with only one param (url) - makes GET request
+  })
+    .then((response) => {
+      // fetch returns promise resolved with 'Response' object with streamed data which should be converted first via .json()
+      if (response.status >= 200 && response.status < 300) {
+        return response.json(); // .json returns promise as well
+      } else {
+        return response.json().then((errorData) => {
+          console.log(errorData); // access error body when error occurs
+          throw new Error('Server-side error');
+        });
+      }
+    })
+    .catch((error) => {
+      console.log('Failed to send request', error);
+      throw new Error('Sending HTTP request failed');
+    }); // returns promise, in simplest form with only one param (url) - makes GET request
 }
 
 // Using Promise - Get Data & append it inside DOM
