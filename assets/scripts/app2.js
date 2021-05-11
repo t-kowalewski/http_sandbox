@@ -11,6 +11,7 @@ function sendHttpRequest(method, url, data) {
   return fetch(url, {
     method: method,
     body: JSON.stringify(data),
+    // body: data, // for FormData test
     headers: {
       'Content-Type': 'application/json',
     },
@@ -63,10 +64,17 @@ function createPost(title, content) {
     userId: postId,
   };
 
+  // FormData example - can add data manually or parse form input and add it
+  // const fd = new FormData(newPostForm); //we add arg. - JS will add data from form
+  // // fd.append('title', title);
+  // // fd.append('body', content);
+  // fd.append('userId', postId);
+
   sendHttpRequest(
     'POST',
     'https://jsonplaceholder.typicode.com/posts',
     post
+    // fd //using FormData
   ).catch((error) => {
     console.log('Posting data failed', error);
   });
